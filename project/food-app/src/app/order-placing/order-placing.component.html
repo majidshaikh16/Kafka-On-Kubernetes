@@ -1,0 +1,23 @@
+<div class="container-fluid mb-5" >
+    <h1>Food Ordering Form</h1>
+    
+    <form action="" #orderForm="ngForm"> 
+      <div class="alert alert-danger" role="alert" *ngIf="isErrorSubmitting">
+        Oops! found some issues while submitting the order to server.
+      </div>
+      <div class="alert alert-success" *ngIf="successMsg.length > 0">
+        {{successMsg}}
+      </div>
+        <!-- {{ orderForm.value | json}} -->
+        <hr/>
+      <div class="form-group">
+        <label for="">Order</label>
+        <input type="text" class="form-control" name="nameTxt" [(ngModel)] = "order.name">
+      </div>
+      <div class="form-group">
+        <label for="">Order</label>
+        <input type="number" class="form-control" name="quantityTxt" [(ngModel)]= "order.quantity">
+      </div>
+      <button class="btn btn-primary" (click)="submitOrder()">Submit</button>
+    </form>
+  </div>

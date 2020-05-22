@@ -1,0 +1,567 @@
+   diameter-ap-01:
+      container_name: ${clt}_diameter-ap-01
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      image: nexus.haud.report:5002/diameter-ap:${image_ap}
+      environment:
+         - "JMX_PORT=${jmx_ap01?err}"
+         - "JMX_RMI_PORT=${jmx_ap01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      labels:
+         com.haud.svalinn.service.ap.diameter.name: Diameter Access Point
+         com.haud.svalinn.service.ap.diameter.type: ap
+         com.haud.svalinn.version: 2.0.2
+         com.haud.svalinn.name: diameterap
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_ap?err}
+      restart: "no"
+      ports: 
+         - ${jmx_ap01}:${jmx_ap01}
+#         - ${expose_client_ap01}
+         - ${snmp161_ap01}
+         - ${snmp162_ap01}
+         #- ${expose_ap01}
+        # - "4001:4001"
+        # - "4000:4000"
+        # - "5295:5295"
+        # - "5001:5001"
+      volumes:
+         - ${volumes_dir}/diameter-ap-01/config/:/srv/haud/diameter-ap/config
+         - ${volumes_dir}/diameter-ap-01/logs/:/srv/haud/diameter-ap/logs
+         - ${volumes_dir}/diameter-ap-01/pcap/:/srv/haud/diameter-ap/pcap
+         - ${volumes_dir}/diameter-ap-01/cdr/:/srv/haud/diameter-ap/cdr
+         - ${volumes_dir}/dumps/dap1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - /opt/development-server/envbuilder/diameter-ap.jks:/srv/haud/cert.jks
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "ap:${ipv4_ap}"
+         - "ap01:${ipv4_ap01}"
+         - "ap02:${ipv4_ap02}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+
+   diameter-ap-02:
+      container_name: ${clt}_diameter-ap-02
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      image: nexus.haud.report:5002/diameter-ap:${image_ap}
+      environment:
+         - "JMX_PORT=${jmx_ap02?err}"
+         - "JMX_RMI_PORT=${jmx_ap02?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      labels:
+         com.haud.svalinn.service.ap.diameter.name: Diameter Access Point
+         com.haud.svalinn.service.ap.diameter.type: ap
+         com.haud.svalinn.version: 2.0.2
+         com.haud.svalinn.name: diameterap
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_ap02?err}
+      restart: "no"
+      ports:
+         - ${jmx_ap02}:${jmx_ap02}
+         - ${snmp161_ap02}
+         - ${snmp162_ap02}
+         - ${expose_ap02_sctp}
+         - ${expose_ap02_tcp}
+      volumes:
+         - ${volumes_dir}/dumps/dap2/:/srv/dumps/
+         - ${volumes_dir}/diameter-ap-02/config/:/srv/haud/diameter-ap/config
+         - ${volumes_dir}/diameter-ap-02/logs/:/srv/haud/diameter-ap/logs
+         - ${volumes_dir}/diameter-ap-02/pcap/:/srv/haud/diameter-ap/pcap
+         - ${volumes_dir}/diameter-ap-02/cdr/:/srv/haud/diameter-ap/cdr
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - /opt/development-server/envbuilder/diameter-ap.jks:/srv/haud/cert.jks
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "ap:${ipv4_ap}"
+         - "ap01:${ipv4_ap01}"
+         - "ap02:${ipv4_ap02}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_ap?err}"
+
+   decision-module-01:
+      container_name: ${clt}_decision-module-01
+      hostname: decision-module-01
+   #   command: /bin/bash
+      tty: true
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_decision_01?err}"
+         - "JMX_RMI_PORT=${jmx_decision_01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M  -javaagent:/srv/haud/elastic-apm-agent.jar -Delastic.apm.service_name=decision-module -Delastic.apm.server_url=http://apm:8200 -Delastic.apm.secret_token= -Delastic.apm.application_packages=com.haud,org.springframework -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_decision_01}:${jmx_decision_01}
+         - ${expose_decision_01}
+      image: nexus.haud.report:5002/decision-module-service:${image_decision?err}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_decision_01?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/dm1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_decision_01?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl -f --silent --fail http://self:8080/actuator/health | fgrep UP || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+
+   cat2-service-01:
+      container_name: ${clt}_cat2-service-01
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_cat2_01?err}"
+         - "JMX_RMI_PORT=${jmx_cat2_01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_cat2_01}:${jmx_cat2_01}
+         - ${expose_cat2_01}
+      expose:
+         - 8080
+      labels:
+         com.haud.svalinn.service.cat2.name: Category 2 Service
+         com.haud.svalinn.service.cat2.type: api
+      image: nexus.haud.report:5002/cat2-service:${image_cat2?err}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_cat2_01?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/c2s1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "redis:${ipv4_redis?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_cat2_01?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl http://self:8080 || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+
+   cat3-service-01:
+      container_name: ${clt}_cat3-service-01
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_cat3_01?err}"
+         - "JMX_RMI_PORT=${jmx_cat3_01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms1024M -Xmx1024M -XX:MaxMetaspaceSize=256M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_cat3_01}:${jmx_cat3_01}
+         - ${expose_cat3_01}
+      expose:
+         - 8080
+      labels:
+         com.haud.svalinn.service.cat3.name: Category 3 Service
+         com.haud.svalinn.service.cat3.type: api
+      image: nexus.haud.report:5002/category-3-service:${image_cat3?err}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_cat3_01?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/c3s1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "redis:${ipv4_redis?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_cat3_01?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl http://self:8080 || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+
+   cdr-service-01:
+      container_name: ${clt}_cdr-service-01
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      image: nexus.haud.report:5002/cdr-service:${image_cdr?err}
+      environment:
+         - "JMX_PORT=${jmx_cdr_01?err}"
+         - "JMX_RMI_PORT=${jmx_cdr_01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_cdr_01?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/cdr1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      ports:
+         - ${jmx_cdr_01}:${jmx_cdr_01}
+         - ${expose_cdr_01}
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "ap:${ipv4_ap}"
+         - "ap01:${ipv4_ap01}"
+         - "ap02:${ipv4_ap02}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+
+   decision-module-02:
+      container_name: ${clt}_decision-module-02
+      hostname: decision-module-02
+   #   command: /bin/bash
+      tty: true
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_decision_02?err}"
+         - "JMX_RMI_PORT=${jmx_decision_02?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -javaagent:/srv/haud/elastic-apm-agent.jar -Delastic.apm.service_name=decision-module -Delastic.apm.server_url=http://apm:8200 -Delastic.apm.secret_token= -Delastic.apm.application_packages=com.haud,org.springframework -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/dm2/"
+      ports:
+         - ${jmx_decision_02}:${jmx_decision_02}
+         - ${expose_decision_02}
+      image: nexus.haud.report:5002/decision-module-service:${image_decision?err}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_decision_02?err}
+      restart: "no"
+      volumes:
+         - ${volumes_dir}/dumps/dm2/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_decision_02?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+         - "apm:${ipv4_apm}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl -f --silent --fail http://self:8080/actuator/health | fgrep UP || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+
+   cat2-service-02:
+      container_name: ${clt}_cat2-service-02
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_cat2_02?err}"
+         - "JMX_RMI_PORT=${jmx_cat2_02?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_cat2_02}:${jmx_cat2_02}
+         - ${expose_cat2_02}
+      expose:
+         - 8080
+      labels:
+         com.haud.svalinn.service.cat2.name: Category 2 Service
+         com.haud.svalinn.service.cat2.type: api
+      image: nexus.haud.report:5002/cat2-service:${image_cat2?err}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_cat2_02?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/c2s2/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "redis:${ipv4_redis?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_cat2_02?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl http://self:8080 || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+
+   cat3-service-02:
+      container_name: ${clt}_cat3-service-02
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_cat3_02?err}"
+         - "JMX_RMI_PORT=${jmx_cat3_02?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_cat3_02}:${jmx_cat3_02}
+         - ${expose_cat3_02}
+      expose:
+         - 8080
+      labels:
+         com.haud.svalinn.service.cat3.name: Category 3 Service
+         com.haud.svalinn.service.cat3.type: api
+      image: nexus.haud.report:5002/category-3-service:${image_cat3?err}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_cat3_02?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/c3s2/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "redis:${ipv4_redis?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "self:${ipv4_cat3_02?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl http://self:8080 || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+
+   cdr-service-02: 
+      container_name: ${clt}_cdr-service-02
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      image: nexus.haud.report:5002/cdr-service:${image_cdr?err}
+      environment:
+         - "JMX_PORT=${jmx_cdr_02?err}"
+         - "JMX_RMI_PORT=${jmx_cdr_02?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_cdr_02?err}
+      restart: "no"
+      ports:
+         - ${jmx_cdr_02}:${jmx_cdr_02}
+         - ${expose_cdr_02}
+      volumes: 
+         - ${volumes_dir}/dumps/cdr2/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      extra_hosts:
+         - "redis01:${ipv4_redis01}"
+         - "redis02:${ipv4_redis02}"
+         - "redis03:${ipv4_redis03}"
+         - "ap:${ipv4_ap}"
+         - "ap01:${ipv4_ap01}"
+         - "ap02:${ipv4_ap02}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+   statstodb-service-01:
+      container_name: ${clt}_statstodb-service-01
+      tty: true
+      image: nexus.haud.report:5002/statistics-redis-to-database:${image_statstodb?err}
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_statstodb_01?err}"
+         - "JMX_RMI_PORT=${jmx_statstodb_01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_statstodb_01}:${jmx_statstodb_01}
+         - ${expose_statstodb_01}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_statstodb_01?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/s2db1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+         - "/opt/development-server/bin/elastic-apm-agent-1.12.0.jar:/srv/haud/elastic-apm-agent.jar"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl -f --silent --fail http://self:8080/actuator/health | fgrep UP || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+      extra_hosts:
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "redis:${ipv4_redis?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "self:${ipv4_statstodb_01?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+
+   statstoredis-service-01:
+      container_name: ${clt}_statstoredis-service-01
+      tty: true
+      image: nexus.haud.report:5002/traffic-statistics-processor:${image_statstoredis?err}
+      env_file:
+         - env_file/ports.env
+         - env_file/common.env
+      environment:
+         - "JMX_PORT=${jmx_statstoredis_01?err}"
+         - "JMX_RMI_PORT=${jmx_statstoredis_01?err}"
+         - "JMX_HOST=${JMX_HOST}"
+         - "JAVA_OPTS=-Xms64M -Xmx64M -XX:MaxMetaspaceSize=128M -XX:+HeapDumpOnOutOfMemoryError  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/srv/dumps/"
+      ports:
+         - ${jmx_statstoredis_01}:${jmx_statstoredis_01}
+         - ${expose_statstoredis_01}
+      networks:
+         svalinn-develop-release-net0:
+            ipv4_address: ${ipv4_statstoredis_01?err}
+      restart: "no"
+      volumes: 
+         - ${volumes_dir}/dumps/s2r1/:/srv/dumps/
+         - "/etc/timezone:/etc/timezone:ro"
+         - "/etc/localtime:/etc/localtime:ro"
+      extra_hosts:
+         - "kafka1:${ipv4_kafka1}"
+         - "kafka2:${ipv4_kafka2}"
+         - "kafka3:${ipv4_kafka3}"
+         - "db-service:${ipv4_db}"
+         - "config-service:${ipv4_config?err}"
+         - "redis:${ipv4_redis?err}"
+         - "http-lb:${ipv4_lb?err}"
+         - "self:${ipv4_statstoredis_01?err}"
+         - "sentinel01:${ipv4_sentinel01}"
+         - "sentinel02:${ipv4_sentinel02}"
+         - "sentinel03:${ipv4_sentinel03}"
+      healthcheck:
+         test: [ "CMD-SHELL",  "curl -f --silent --fail http://self:8080/actuator/health | fgrep UP || exit 1" ]
+         interval: 10s
+         retries: 3
+         start_period: 5s
+         timeout: 4s
+

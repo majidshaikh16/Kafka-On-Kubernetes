@@ -1,0 +1,47 @@
+server:
+  port: 8200
+spring:
+  application:
+    name: load-test-service
+  cache:
+    type: redis
+  kafka:
+    max-partition: 3
+    listener:
+      type: batch
+    consumer:
+      topic:
+        name: Statistics-Writer-Topic
+      group-id: stats-local
+      fetch-max-wait: 1
+      max-poll-records: 200
+      fetch-min-size: 200
+      bootstrap-servers: ${KAFKA_HOST}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+    producer:      
+#      buffer-memory: 33554432
+      batch-size: 16384 # default value is 16384. # size of batch in bytes
+      properties:
+        "acks": 1
+        "linger.ms": 10
+#        "batch.size": 10
+#        "buffer.memory": 33554432
+#        "max.block.ms": 60000
+#        "max.in.flight.requests.per.connection": 1
+#        "max.request.size": 14000000
+        "request.timeout.ms": 60000
+        "retries": 5  
+#        "retry.backoff.ms": 1000      
+      topic:
+        name: order_writer
+      bootstrap-servers: ${KAFKA_HOST}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+       
+      
+load:
+  get-acks-count: false  
+  
+KAFKA_HOST: localhost:29092     

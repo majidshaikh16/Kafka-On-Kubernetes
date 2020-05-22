@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+    food-app:
+        container_name: food-app
+        ports: 
+            - 8088:80
+        image: food-app:latest
+        networks:
+            - app-tier                          
+    
+    kafka-consumer:
+        build: 
+            context: ../project/Kafka-Consumer-Prototype/
+            dockerfile: Dockerfile
+        environment: 
+            DB_HOST: "db-service:3306"
+            KAFKA_HOST: "kafka01:9092"
+        ports: 
+            - 8300:8300
+        networks:
+            - app-tier     
+    kafka-producer:
+        build: 
+            context: ../project/Kafka-Producer-Prototype/
+            dockerfile: Dockerfile
+        environment: 
+            KAFKA_HOST: "kafka01:9092"
+        ports: 
+            - 8200:8200
+        networks:
+            - app-tier                          
+
+
+networks:
+  app-tier:
+    driver: bridge            

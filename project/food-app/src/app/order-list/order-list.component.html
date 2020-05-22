@@ -1,0 +1,18 @@
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Order-Id</th>
+        <th scope="col">Order-Name</th>
+        <th scope="col">Order-Quantity</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let order of allOrders;index as i">
+      <tr>
+        <th scope="row"> {{i +1}} </th>
+        <td> {{order.uuid}} </td>
+        <td>{{order.name}}</td>
+        <td>{{order.quantity}}</td>
+      </tr>
+    </tbody>
+  </table>

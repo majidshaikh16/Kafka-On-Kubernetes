@@ -1,0 +1,22 @@
+
+<h1 [ngStyle]="textStyles">{{greetUser()}} {{appName}}</h1>
+
+<form action="#" method="post">
+    <div class="imgcontainer">
+      <img src="https://i.ibb.co/WnCrBGV/ordericon.png" alt="Avatar" class="avatar">
+    </div>
+  
+    <div class="container">
+      <label for="uname"><b>Order</b></label>&nbsp;&nbsp;
+      <input type="text" [(ngModel)]="orderVal" #order (keyup)="validateFields(order.value,orderqty.value)" placeholder="Enter Your Order" name="uname" required>
+        <br/>
+      <label for="psw"><b>Quantity</b></label>&nbsp;&nbsp;
+      <input bind-type="inputType" #orderqty [(ngModel)]="qtyVal" (change)="validateFields(order.value,orderqty.value)" placeholder="Enter Order Quantity" name="psw" required>
+      <br/> 
+      <h2  [ngClass]="textClass" *ngIf="!isOrderValid; else orderNow">Please fill the order details</h2>
+
+      <ng-template #orderNow>
+      <button type="submit" (click)="submitOrder()" >Order Now</button>
+    </ng-template>
+    </div>
+  </form>

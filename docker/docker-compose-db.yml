@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  db-service:
+    container_name: db-service
+    image: mysql:5.6
+    restart: always
+    ports:
+       - 3306:3306
+    volumes:
+       - /home/majid/Documents/Study/Kafka/tutorial/volumes/mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - app-tier 
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8084:8080
+    networks:
+      - app-tier 
+  
+
+
+networks:
+  app-tier:
+    driver: bridge
+

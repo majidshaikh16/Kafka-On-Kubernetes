@@ -1,0 +1,60 @@
+server:
+  port: 8300
+spring:
+  application:
+    name: load-test-service
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}/order_db?createDatabaseIfNotExist=true&useSSL=true
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    connection-test-query: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: false
+    show-sql: true    
+  cache:
+    type: redis
+  kafka:
+    max-partition: 3
+    listener:
+      type: batch
+    consumer:
+      topic:
+        name: order_writer
+      group-id: stats-local
+      properties:
+        "fetch.max.bytes": 25000 #2.5 MB defualt is 52428800 52.4MB
+        "fetch.max.wait.ms": 10
+        "fetch.min.bytes": 500
+        "max.poll.records": 500
+        "max.poll.interval.ms": 10000
+      bootstrap-servers: ${KAFKA_HOST}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+    producer:      
+#      buffer-memory: 33554432
+      batch-size: 16384 # default value is 16384. # size of batch in bytes
+      properties:
+        "acks": 1
+        "linger.ms": 10
+#        "batch.size": 10
+#        "buffer.memory": 33554432
+#        "max.block.ms": 60000
+#        "max.in.flight.requests.per.connection": 1
+#        "max.request.size": 14000000
+        "request.timeout.ms": 60000
+        "retries": 5  
+#        "retry.backoff.ms": 1000      
+      topic:
+        name: order_status
+      bootstrap-servers: ${KAFKA_HOST}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      
+DB_HOST: localhost:3306    
+KAFKA_HOST: localhost:29092
+    
