@@ -1,0 +1,26 @@
+							Apache Kafka installations Steps:
+1) Download Apache Kafka :
+wget http://mirrors.estointernet.in/apache/kafka/2.4.0/kafka_2.13-2.4.0.tgz
+
+2) Extract it :
+$ tar -xzvf kafka_2.13-2.4.0.tgz
+
+3) Start Zookeeper :
+$ cd /$kafka-location$/bin/zookeeper-server-start.sh config/zookeeper.properties
+
+4) start the Kafka server :
+$ cd /$kafka-location$/bin/kafka-server-start.sh config/server.properties
+
+5) Create a topic for test :
+$  cd /$kafka-location$/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
+
+6)  Run the producer and then type a few messages into the console to send to the server :	
+$  cd /$kafka-location$/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+	>This is a message
+	>This is another message
+
+7) Step 5: Start a consumer :
+$  cd /$kafka-location$/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+	>This is a message
+	>This is another message
+

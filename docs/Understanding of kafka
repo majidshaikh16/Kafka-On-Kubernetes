@@ -1,0 +1,25 @@
+KAFKA
+
+* Understanding of kafka
+* where is the data stored from partition after sending does it stores or not?
+==> Data is stored on disk in log.dir.The default log.dir is /tmp/kafka-logs.
+
+* if we send to one topic will it send to any one partition or all the available partition?
+=> If the producer does not indicate where to write the data, the broker uses the key to partition and replicate messages. When the key is null, messages are distributed using the round-robin distribution.
+
+* if partition 0 and 1 are there and all of sudden consumer stop/kills consuming frm 0 will it automatically send the load of 0 to 1 as there is no one listening on 0 for now
+-----Each partition has one server which acts as the "leader" and zero or more servers which act as "followers". The leader handles all read and write requests for the partition while the followers passively replicate the leader. If the leader fails, one of the followers will automatically become the new leader. 
+
+* is there any master slave concept which is used?
+==> Kafka does not have a notion of "master" and "slave" nodes with regards to its brokers (unlike related technologies such as Apache Hadoop, Spark, or Storm). "All brokers are created equal"
+
+* How to install on single machine
+
+* How to install on cluster master slave
+
+* how can we share partition of the same topic on multiple machines
+
+* how to use retention policy:
+==> log.retention.hours or log.retention.minutes in properties of broker configuration
+
+* how message key works when we have to produce on a specific topic only

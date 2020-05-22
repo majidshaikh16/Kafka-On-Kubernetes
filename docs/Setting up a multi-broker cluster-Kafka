@@ -1,0 +1,108 @@
+###############################Setting up a multi-broker cluster (2 kafka servers on local-host)#############################################
+
+1)First we make a config file for each of the brokers (on Windows use the copy command instead):
+> cp config/server.properties config/server-1.properties
+> cp config/server.properties config/server-2.properties
+
+Now edit these new files and set the following properties:
+	
+config/server-1.properties:
+    broker.id=1
+    listeners=PLAINTEXT://:9093
+    log.dirs=/tmp/kafka-logs-1
+ 
+config/server-2.properties:
+    broker.id=2
+    listeners=PLAINTEXT://:9094
+    log.dirs=/tmp/kafka-logs-2
+
+The broker.id property is the unique and permanent name of each node in the cluster. We have to override the port and log directory only because we are running these all on the same machine.
+
+2) Start Zookeeper with zookeeper.properties file:
+$ cd /$kafka-location$ then ./bin/zookeeper-server-start.sh config/zookeeper.properties
+
+3) Start the two servers with respective config files:	
+> bin/kafka-server-start.sh config/server-1.properties &
+...
+> bin/kafka-server-start.sh config/server-2.properties &
+...
+
+4) Create a new topic with a replication factor of two:	
+> ./bin/kafka-topics.sh --create --bootstrap-server 10.0.60.32:9092 --replication-factor 2 --partitions 3 --topic email
+
+	Okay but now that we have a cluster how can we know which broker is doing what? To see that run the "describe topics" command:	
+> bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic email
+Topic: email1	PartitionCount: 3	ReplicationFactor: 2	Configs: 
+	Topic: email	Partition: 0	Leader: 1	Replicas: 1,2	Isr: 1,2
+	Topic: email	Partition: 1	Leader: 2	Replicas: 2,1	Isr: 2,1
+	Topic: email	Partition: 2	Leader: 1	Replicas: 1,2	Isr: 1,2
+
+Here is an explanation of output. The first line gives a summary of all the partitions, each additional line gives information about one partition. Since we have only one partition for this topic there is only one line.
+
+    "leader" is the node responsible for all reads and writes for the given partition. Each node will be the leader for a randomly selected portion of the partitions.
+    "replicas" is the list of nodes that replicate the log for this partition regardless of whether they are the leader or even if they are currently alive.
+    "isr" is the set of "in-sync" replicas. This is the subset of the replicas list that is currently alive and caught-up to the leader. 
+
+5) Create producer:	
+>bin/kafka-console-producer.sh --broker-list 10.0.60.32:9092 --topic email
+>hi
+>hello
+
+6) Create Consumer:
+>bin/kafka-console-consumer.sh --bootstrap-server 10.0.60.32:9092 --from-beginning --topic email
+hi
+hello
+
+
+
+
+############################ Creating a server on remote machine and connect to zookeeper which is on another machine #####################
+
+remote machine ip : 10.0.60.45
+
+1) Install kafka as per the steps given:
+1) Download Apache Kafka :
+wget http://mirrors.estointernet.in/apache/kafka/2.4.0/kafka_2.13-2.4.0.tgz
+
+2) Extract it :
+$ tar -xzvf kafka_2.13-2.4.0.tgz
+
+3) Make changes in server.properties :
+	broker.id=3
+	zookeeper.connect=ip-on-which-zookeeper-is-running:2181
+		
+4) start the Kafka server :
+$ cd /$kafka-location$/bin/kafka-server-start.sh config/server.properties
+
+
+5)Create a new topic with a replication factor of two:	
+> ./bin/kafka-topics.sh --create --bootstrap-server 10.0.60.45:9092 --replication-factor 1 --partitions 2 --topic email1
+
+	To see that run the "describe topics" command:	
+> bin/kafka-topics.sh --describe --zookeeper 10.0.60.32:2181 --topic email
+Topic: email1	PartitionCount: 2	ReplicationFactor: 1	Configs: 
+	Topic: email	Partition: 0	Leader: 1	Replicas: 1	Isr: 1
+	Topic: email	Partition: 1	Leader: 1	Replicas: 1	Isr: 1
+	
+6) Create producer:	
+>bin/kafka-console-producer.sh --broker-list 10.0.60.45:9092 --topic email1
+>hi
+>hello
+
+7) Create Consumer:
+>bin/kafka-console-consumer.sh --bootstrap-server 10.0.60.45:9092 --from-beginning --topic email1
+hi
+hello
+
+
+
+
+
+
+
+
+
+
+
+
+
