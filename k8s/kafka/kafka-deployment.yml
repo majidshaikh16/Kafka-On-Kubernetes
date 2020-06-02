@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-deployment
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      component: kafka
+  template:
+    metadata:
+      labels:
+        component: kafka
+    spec:
+      containers:
+        - image: bitnami/kafka
+          name: kafka
+          resources:
+            requests:
+              cpu: "20m"
+              memory: "55M"
+          env:
+            - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+              value: 'zookeeper-cluster-ip-service:2181'
+            - name: ALLOW_PLAINTEXT_LISTENER
+              value: 'yes'
+            - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
+              value: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+            - name: KAFKA_CFG_LISTENERS
+              value: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:29092'
+            - name: KAFKA_CFG_ADVERTISED_LISTENERS
+              value: 'PLAINTEXT://kafka-cluster-ip-service:9092,PLAINTEXT_HOST://localhost:29092'      
+          ports:
+            - containerPort: 9092
+            - containerPort: 29092
+          volumeMounts:
+            - mountPath: /bitnami/kafka
+              name: kafka-storage
+      volumes:
+        - name: kafka-storage
+          persistentVolumeClaim:
+            claimName: kafka-persistance-volume-claim

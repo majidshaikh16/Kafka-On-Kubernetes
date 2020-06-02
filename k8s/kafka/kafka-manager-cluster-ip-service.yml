@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kafka-manager-cluster-ip-service
+spec:
+  selector:
+    component: kafka-manager
+  type: ClusterIP
+  ports:
+    - port: 9000
+      targetPort: 9000

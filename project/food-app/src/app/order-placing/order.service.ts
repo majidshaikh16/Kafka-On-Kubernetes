@@ -9,19 +9,23 @@ import { IOrder } from './IOrder';
 })
 export class OrderService {
 
-  constructor(private http: HttpClient) { }
-  orderUrl = 'http://localhost:8200/order/';
-  orderUrl1 = 'http://localhost:8300/order/';
-
-  createNewOrder(order: Order): Observable<string>{
-    return this.http.post<string>(this.orderUrl+'new',order);
+  private prop;
+  constructor(private http: HttpClient) {
+    this.http.get('/food-app/assets/config.json').subscribe(data => {
+      console.log(data);
+      this.prop = data;
+    });
   }
 
-  getAllOrder(){
-    return this.http.get<IOrder>(this.orderUrl1+'getAll');
+  createNewOrder(order: Order): Observable<string> {
+    return this.http.post<string>(this.prop.producerUrl + 'new', order);
   }
 
-  handleOrderError(type: string, order:Order){
+  getAllOrder() {
+    return this.http.get<IOrder>(this.prop.consumerUrl + 'getAll');
+  }
+
+  handleOrderError(type: string, order: Order) {
 
   }
 }

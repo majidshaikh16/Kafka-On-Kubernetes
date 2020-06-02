@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  kafka-cluster-ip-service
+spec:
+  selector:
+    component:  kafka
+  type: ClusterIP
+  ports:
+  - port:  9092
+    targetPort:  9092
+    name: 'internal-port'
+  - port:  29092
+    targetPort:  29092
+    name: 'local-port'  

@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1 #networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  namespace: default
+  annotations:
+    # nginx.ingress.kubernetes.io/proxy-connect-timeout: "180" #seconds
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "300" #seconds
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kafka-manager-cluster-ip-service
+              servicePort: 9000
+          - path: /assets/(/|$)(.*)
+            backend:
+              serviceName: kafka-manager-cluster-ip-service
+              servicePort: 9000
+          - path: /food-app/?(.*) #this means any request url needs to forworded to the below cluster ip
+            backend:
+              serviceName: food-app-cluster-ip-services
+              servicePort: 80

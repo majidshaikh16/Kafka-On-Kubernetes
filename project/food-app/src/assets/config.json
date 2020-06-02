@@ -1,0 +1,4 @@
+{
+    "producerUrl": "http://localhost:8200/order/",
+    "consumerUrl": "http://localhost:8300/order/"
+}

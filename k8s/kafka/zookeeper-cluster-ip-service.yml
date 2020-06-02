@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: zookeeper-cluster-ip-service
+spec:
+  selector:
+    component: zookeeper
+  type: ClusterIP
+  ports:
+    - port: 2181
+      targetPort: 2181

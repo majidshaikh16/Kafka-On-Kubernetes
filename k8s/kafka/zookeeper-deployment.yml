@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper-deployment
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      component: zookeeper
+  template:
+    metadata:
+      labels:
+        component: zookeeper
+    spec:
+      containers:
+        - image: bitnami/zookeeper
+          name: zookeeper
+          resources:
+            requests:
+              cpu: "20m"
+              memory: "55M"
+          env:
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: 'yes'
+          ports:
+            - containerPort: 2181
+              name: zookeeper
+          volumeMounts:
+            - mountPath: /bitnami/zookeeper
+              name: zookeeper-storage
+      volumes:
+        - name: zookeeper-storage
+          persistentVolumeClaim:
+            claimName: kafka-persistance-volume-claim

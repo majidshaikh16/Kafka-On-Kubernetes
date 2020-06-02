@@ -4,6 +4,8 @@ import static com.research.util.ObjectMapper.objectToBytes;
 
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +29,7 @@ public class OrderController {
 	private Producer producer;
 
 	@PostMapping(path = "/new")
-	public String newOrder(@RequestBody Order order) {
+	public String newOrder(@RequestBody @Valid Order order) {
 		String uuid = UUID.randomUUID().toString();
 		order.setUuid(uuid);
 		log.info("Received a new order {} uuid {}", order, uuid);

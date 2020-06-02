@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  adminer-deployment
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      component:  adminer 
+  template:
+    metadata:
+      labels:
+        component:  adminer
+    spec:
+      containers:
+      - image:  adminer
+        name:  adminer
+        resources:
+          requests:
+            cpu: "20m"
+            memory: "55M"     
+        ports:
+        - containerPort:  8083
+          name:  adminer
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}

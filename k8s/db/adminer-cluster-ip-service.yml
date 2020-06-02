@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  adminer-cluster-ip-service
+spec:
+  selector:
+    component:  adminer
+  type: ClusterIP
+  ports:
+  - port:  8083
+    targetPort:  8080

@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: consumer-cluster-ip-services
+spec:
+  selector:
+    component: consumer
+  type: ClusterIP
+  ports:
+    - port: 8200
+      targetPort: 8200

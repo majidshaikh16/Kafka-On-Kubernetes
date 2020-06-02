@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: food-app-cluster-ip-services
+spec:
+  selector:
+    component: food-app
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80

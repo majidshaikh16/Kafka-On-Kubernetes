@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envread-settings
+  # namespace: production
+data:
+  config.json: |-
+    {
+      "producerUrl": "http://localhostproducer:8200/order/",
+      "consumerUrl": "http://localhostconsumer:8300/order/"
+    }
