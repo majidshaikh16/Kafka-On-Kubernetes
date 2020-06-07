@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1 #networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: app-ingress-service
+  namespace: default
+  annotations:
+    # nginx.ingress.kubernetes.io/proxy-connect-timeout: "180" #seconds
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "300" #seconds
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api/consumer/?(.*)
+            backend:
+              serviceName: consumer-cluster-ip-services
+              servicePort: 8300
+          - path: /api/producer/?(.*)
+            backend:
+              serviceName: producer-cluster-ip-services
+              servicePort: 8200    

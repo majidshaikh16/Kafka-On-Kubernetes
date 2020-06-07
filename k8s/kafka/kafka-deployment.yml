@@ -33,7 +33,7 @@ spec:
             - name: KAFKA_CFG_LISTENERS
               value: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:29092'
             - name: KAFKA_CFG_ADVERTISED_LISTENERS
-              value: 'PLAINTEXT://kafka-cluster-ip-service:9092,PLAINTEXT_HOST://localhost:29092'      
+              value: 'PLAINTEXT://kafka-cluster-ip-service:9092,PLAINTEXT_HOST://kafka-cluster-ip-service:29092'      
           ports:
             - containerPort: 9092
             - containerPort: 29092

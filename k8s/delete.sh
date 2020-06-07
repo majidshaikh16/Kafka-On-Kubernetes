@@ -33,7 +33,7 @@ else
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # do dangerous stuff
         echo "Deleting all the pods and deployments [App, DB, Kafka, Ingress, Volumes]"
-        kubectl delete -f ./db/
+        kubectl delete -f db/
         kubectl delete -f kafka/
         kubectl delete -f app/
         kubectl delete -f ingress/

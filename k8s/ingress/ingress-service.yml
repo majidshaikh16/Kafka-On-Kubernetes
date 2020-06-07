@@ -24,4 +24,4 @@ spec:
           - path: /food-app/?(.*) #this means any request url needs to forworded to the below cluster ip
             backend:
               serviceName: food-app-cluster-ip-services
-              servicePort: 80
+              servicePort: 80 
