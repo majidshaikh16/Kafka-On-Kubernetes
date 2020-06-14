@@ -6,6 +6,6 @@ metadata:
 data:
   config.json: |-
     {
-      "producerUrl": "http://192.168.99.100/api/producer/order/",
-      "consumerUrl": "http://192.168.99.100/api/consumer/order/"
+      "producerUrl": "http://192.168.99.102/api/producer/order/",
+      "consumerUrl": "http://192.168.99.102/api/consumer/order/"
     }

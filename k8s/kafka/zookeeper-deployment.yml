@@ -19,16 +19,36 @@ spec:
       containers:
         - image: bitnami/zookeeper
           name: zookeeper
-          resources:
+          resources:              
             requests:
               cpu: "20m"
               memory: "55M"
           env:
             - name: ALLOW_ANONYMOUS_LOGIN
-              value: 'yes'
+              value: "yes"
           ports:
             - containerPort: 2181
               name: zookeeper
+          livenessProbe:
+            exec:
+              command:
+                [
+                  "/bin/bash",
+                  "-c",
+                  'echo "srvr" | nc -w 2 -q 2 localhost 2181 | grep Received',
+                ]
+            initialDelaySeconds: 15
+            timeoutSeconds: 15
+          readinessProbe:
+            exec:
+              command:
+                [
+                  "/bin/bash",
+                  "-c",
+                  'echo "srvr" | nc -w 2 -q 2 localhost 2181 | grep Received',
+                ]
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
           volumeMounts:
             - mountPath: /bitnami/zookeeper
               name: zookeeper-storage
