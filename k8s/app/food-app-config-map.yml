@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: envread-settings
   # namespace: production
+  # set 192.168.99.102 to your minikub id on Cloud platform generate a static ip
 data:
   config.json: |-
     {

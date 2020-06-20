@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1 # this variable ensure that google cloud does not prompt us any selection or questions as it an automation process.
+before_install:
+  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in simple-service-account.json.enc -out simple-service-account.json -d # contains all the google cloud details securely in an encrypted file.
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+  - gcloud auth activate-service-account --key-file simple-service-account.json
+  - gcloud config set project simple-k8s-255511
+  - gcloud config set compute/zone asia-south1-a
+#  - gcloud config set container/use_client_certificate True
+  - gcloud container clusters get-credentials simple-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+language: generic
+deploy:
+  provider: script
+  script: bash ./Deploy.sh
+  on:
+    branch: master

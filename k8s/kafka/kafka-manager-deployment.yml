@@ -23,8 +23,6 @@ spec:
             requests:
               cpu: "20m"
               memory: "55M"
-          # args: "-Dpidfile.path=/dev/null"
-          # command: ["-Dpidfile.path=/dev/null"]
           env:
             - name: ZK_HOSTS
               value: "zookeeper-cluster-ip-service:2181"
