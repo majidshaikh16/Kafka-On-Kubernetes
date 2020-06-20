@@ -13,7 +13,7 @@
 	<artifactId>Kafka-Consumer-Prototype</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Kafka-Consumer-Prototype</name>
-	<description>Demo project for Load Testing Haud Apis</description>
+	<description>Demo project for Kafka Consumer</description>
 
 	<properties>
 		<java.version>1.8</java.version>

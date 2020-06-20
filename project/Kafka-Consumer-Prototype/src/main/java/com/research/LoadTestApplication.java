@@ -6,9 +6,14 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * 
+ * @author majid
+ *
+ */
 @SpringBootApplication
-@EntityScan(basePackages="com.research.entity")
-@EnableJpaRepositories(basePackages="com.research.repository")
+@EntityScan(basePackages = "com.research.entity")
+@EnableJpaRepositories(basePackages = "com.research.repository")
 @EnableTransactionManagement
 public class LoadTestApplication {
 

@@ -13,7 +13,7 @@
 	<artifactId>Kafka-Producer-Prototype</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Kafka-Producer-Prototype</name>
-	<description>Demo project for Load Testing Haud Apis</description>
+	<description>Demo project for Kafka Producer</description>
 
 	<properties>
 		<java.version>1.8</java.version>

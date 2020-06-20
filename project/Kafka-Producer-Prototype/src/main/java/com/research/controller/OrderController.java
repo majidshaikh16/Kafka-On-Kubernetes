@@ -17,13 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.research.dto.Order;
 import com.research.kafka.Producer;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author majid
+ *
+ */
 @Slf4j
 @RestController
 @RequestMapping(path = "/order")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class OrderController {
 	@Autowired
 	private Producer producer;

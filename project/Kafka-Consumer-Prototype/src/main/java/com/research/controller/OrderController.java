@@ -15,17 +15,23 @@ import com.research.service.OrderService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@CrossOrigin(origins="*")
+/**
+ * 
+ * @author majid
+ *
+ */
+
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(path="/order")
+@RequestMapping(path = "/order")
 @Slf4j
 public class OrderController {
 	@Autowired
 	private OrderService orderService;
-	
-	@GetMapping(path="/getAll")
-	public ResponseEntity<OrderDto> getAll(){
+
+	@GetMapping(path = "/getAll")
+	public ResponseEntity<OrderDto> getAll() {
 		List<OrderDto> allOrder = orderService.getAllOrder();
-		return new ResponseEntity(allOrder,HttpStatus.OK);
+		return new ResponseEntity(allOrder, HttpStatus.OK);
 	}
 }

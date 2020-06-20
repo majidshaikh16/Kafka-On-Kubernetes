@@ -1,6 +1,5 @@
 package com.research.dto;
 
-import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -11,6 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 
+ * @author majid
+ *
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,7 +25,7 @@ public class Order {
 	@NotBlank
 	@Size(min = 2, max = 5, message = "Name should be min {min} max {max}")
 	private String name;
-	
-	@DecimalMin(value="1")
+
+	@DecimalMin(value = "1")
 	private int quantity;
 }

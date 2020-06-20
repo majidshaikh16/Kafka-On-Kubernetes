@@ -10,13 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 
+ * @author majid
+ *
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name="order_details")
+@Table(name = "order_details")
 public class Order {
 	@Id
 	private String uuid;

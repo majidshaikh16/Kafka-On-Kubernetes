@@ -21,19 +21,19 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
     producer:      
-#      buffer-memory: 33554432
+      buffer-memory: 33554432
       batch-size: 16384 # default value is 16384. # size of batch in bytes
       properties:
         "acks": 1
         "linger.ms": 10
-#        "batch.size": 10
-#        "buffer.memory": 33554432
-#        "max.block.ms": 60000
-#        "max.in.flight.requests.per.connection": 1
-#        "max.request.size": 14000000
+        "batch.size": 10
+        "buffer.memory": 33554432
+        "max.block.ms": 60000
+        "max.in.flight.requests.per.connection": 1
+        "max.request.size": 14000000
         "request.timeout.ms": 60000
         "retries": 5  
-#        "retry.backoff.ms": 1000      
+        "retry.backoff.ms": 1000      
       topic:
         name: order_writer
       bootstrap-servers: ${KAFKA_HOST}

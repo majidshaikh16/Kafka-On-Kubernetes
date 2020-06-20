@@ -36,6 +36,7 @@ public class Producer {
 		return new ProducerRecord<>(topic, partition, msgKey, payload.getBytes());
 
 	}
+
 	public ProducerRecord<String, byte[]> publishResponse(byte[] payload, int partition, String msgKey) {
 		return new ProducerRecord<>(topic, partition, msgKey, payload);
 

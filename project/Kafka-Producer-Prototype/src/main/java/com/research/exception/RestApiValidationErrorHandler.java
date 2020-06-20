@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * 
+ * @author majid
+ *
+ */
 @RestControllerAdvice
 public class RestApiValidationErrorHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
