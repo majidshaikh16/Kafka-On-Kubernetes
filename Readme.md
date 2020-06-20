@@ -36,10 +36,10 @@
 <img src='https://github.com/majidshaikh16/Kafka/blob/master/arch/Kubernetes-Multi-Cotnainer.jpg'/>
 
 ## Kafka helpful documents.
-- switch to dir /kafka-docs
+-   <a href='https://github.com/majidshaikh16/Kubernetes/blob/master/GKE-Steup.md'>Setup GKE</a>
 
 ## Setup Google Cloud Kubernetes (GKE) Cluster.
--   <a href='https://github.com/majidshaikh16/Kubernetes/blob/master/GKE-Steup.md'>Setup GKE</a>
+-   <a href='https://github.com/majidshaikh16/Kubernetes/tree/master/kafka-docs'>Kafka Docs</a>
 
 ## How to start locally using Docker?
 - Switch to dir /docker
@@ -52,7 +52,7 @@ docker-compose -f docker-compose-kafka.yml up -d
 ```
 ## How to stop locally using Docker?
 - Switch to dir /docker
-- ./stop.sh [args optional to stop a specific module/container]
+- ./stop.sh [args optional db, kafka, app]
 ```sh
 #!/bin/bash
 
@@ -106,6 +106,8 @@ kubectl apply -f app/
 ```
 
 ## How to stop k8's cluster locally?
+- Switch to dir /k8s
+- run ./stop.sh [args optional db, kafka, app,i ngress, volumes]
 ```sh
 #!/bin/bash
 
