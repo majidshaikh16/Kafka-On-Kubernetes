@@ -32,11 +32,14 @@
 
 (K8's Note: I've used secretes stored in Master Node, Just for this demo to run for anyone, I've user secrets as ENV)
 
-## Arch
+## K8's Multi-Container Arch
 <img src='https://github.com/majidshaikh16/Kafka/blob/master/arch/Kubernetes-Multi-Cotnainer.jpg'/>
 
 ## Kafka helpful documents.
 - switch to dir /kafka-docs
+
+## Setup Google Cloud Kubernetes (GKE) Cluster.
+-   <a href='https://github.com/majidshaikh16/Kubernetes/blob/master/GKE-Steup.md'>Setup GKE</a>
 
 ## How to start locally using Docker?
 - Switch to dir /docker
