@@ -36,10 +36,10 @@
 <img src='https://github.com/majidshaikh16/Kafka/blob/master/arch/Kubernetes-Multi-Cotnainer.jpg'/>
 
 ## Kafka helpful documents.
--   <a href='https://github.com/majidshaikh16/Kubernetes/blob/master/GKE-Steup.md'>Setup GKE</a>
+-   <a href='https://github.com/majidshaikh16/Kubernetes/tree/master/kafka-docs'>Kafka Docs</a>
 
 ## Setup Google Cloud Kubernetes (GKE) Cluster.
--   <a href='https://github.com/majidshaikh16/Kubernetes/tree/master/kafka-docs'>Kafka Docs</a>
+-   <a href='https://github.com/majidshaikh16/Kubernetes/blob/master/GKE-Steup.md'>Setup GKE</a>
 
 ## How to start locally using Docker?
 - Switch to dir /docker
