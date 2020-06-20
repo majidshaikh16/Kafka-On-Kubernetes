@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: kafka-manager-deployment
 spec:
+  replicas: 3
   strategy:
     rollingUpdate:
       maxSurge: 1
